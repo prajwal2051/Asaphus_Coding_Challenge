@@ -207,18 +207,32 @@ private:
     double score_{ 0.0 };
 };
 
+/**
+ * Plays the game with the given input weights.
+ */
 std::pair<double, double> play(const std::vector<uint32_t>& input_weights) {
-  std::vector<std::unique_ptr<Box> > boxes;
-  boxes.emplace_back(Box::makeGreenBox(0.0));
-  boxes.emplace_back(Box::makeGreenBox(0.1));
-  boxes.emplace_back(Box::makeBlueBox(0.2));
-  boxes.emplace_back(Box::makeBlueBox(0.3));
+    std::vector<std::unique_ptr<Box> > boxes;
+    boxes.emplace_back(Box::makeGreenBox(0.0));
+    boxes.emplace_back(Box::makeGreenBox(0.1));
+    boxes.emplace_back(Box::makeBlueBox(0.2));
+    boxes.emplace_back(Box::makeBlueBox(0.3));
 
-  // TODO
+    Player player_A;
+    Player player_B;
+    int turn = 0;
+    for (auto weight : input_weights) {
+        if (turn == 0) {
+            player_A.takeTurn(weight, boxes);
+        }
+        else {
+            player_B.takeTurn(weight, boxes);
+        }
+        turn = (turn + 1) % 2;
+    }
 
-  std::cout << "Scores: player A " << player_A.getScore() << ", player B "
-            << player_B.getScore() << std::endl;
-  return std::make_pair(player_A.getScore(), player_B.getScore());
+    std::cout << "Scores: player A " << player_A.getScore() << ", player B "
+        << player_B.getScore() << std::endl;
+    return std::make_pair(player_A.getScore(), player_B.getScore());
 }
 
 TEST_CASE("Final scores for first 4 Fibonacci numbers", "[fibonacci4]") {
