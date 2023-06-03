@@ -269,3 +269,12 @@ TEST_CASE("Test absorption of blue box", "[blue]") {
     REQUIRE(blueBox->getWeight() == 11.0);
 
 }
+
+
+/**
+* Final Output in the console Window
+Scores: player A 13, player B 25
+Scores: player A 155, player B 366.25
+===============================================================================
+All tests passed (14 assertions in 4 test cases)
+*/
