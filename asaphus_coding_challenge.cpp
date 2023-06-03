@@ -182,16 +182,29 @@ std::unique_ptr<Box> Box::makeBlueBox(double initial_weight) {
     return std::make_unique<BlueBox>(initial_weight);
 }
 
+/**
+ * Class representing a Player.
+ */
 class Player {
- public:
-  void takeTurn(uint32_t input_weight,
-                const std::vector<std::unique_ptr<Box> >& boxes) {
-    // TODO
-  }
-  double getScore() const { return score_; }
+public:
+    void takeTurn(uint32_t input_weight,
+        const std::vector<std::unique_ptr<Box> >& boxes) {
+        /**
+         * Find the box with the smallest weight
+         */
+        auto smallestWeightBox = boxes[0].get();
+        for (auto& box : boxes) {
+            if (*box < *smallestWeightBox) {
+                smallestWeightBox = box.get();
+            }
+        }
+        score_ += smallestWeightBox->absorb(input_weight);
+    }
 
- private:
-  double score_{0.0};
+    double getScore() const { return score_; }
+
+private:
+    double score_{ 0.0 };
 };
 
 std::pair<double, double> play(const std::vector<uint32_t>& input_weights) {
