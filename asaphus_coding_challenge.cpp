@@ -90,7 +90,27 @@ private:
   double weight_;
 };
 
-// TODO
+/**
+ * Calculates the mean value of a vector of doubles.
+ *
+ */
+double mean(const std::vector<double>& a) {
+    if (a.size() == 0) return 0;
+    double sum = 0;
+    for (auto x : a) {
+        sum += x;
+    }
+    return sum / a.size();
+}
+
+
+/**
+ * Performs the Cantor Pairing function on two input values.
+ *
+ */
+double cantorPairing(double x, double y) {
+    return (x + y) * (x + y + 1) / 2 + y;
+}
 
 class Player {
  public:
