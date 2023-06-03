@@ -112,6 +112,76 @@ double cantorPairing(double x, double y) {
     return (x + y) * (x + y + 1) / 2 + y;
 }
 
+/**
+ * Derived class representing a GreenBox
+ */
+
+class GreenBox : public Box {
+public:
+    std::vector<double> recentWeights;
+
+    explicit GreenBox(double initial_weight) : Box(initial_weight) {};
+
+    double absorb(double weight) override {
+        Box::absorb(weight);
+        if (recentWeights.size() == 3) {
+            recentWeights[0] = recentWeights[1];
+            recentWeights[1] = recentWeights[2];
+            recentWeights[2] = weight;
+        }
+        else {
+            recentWeights.push_back(weight);
+        }
+        return calculateScore();
+    }
+
+private:
+    double calculateScore() const override {
+        double m = mean(recentWeights);
+        return m * m;
+    };
+};
+
+/**
+ * Derived class representing a BlueBox
+ */
+class BlueBox : public Box {
+public:
+
+    explicit BlueBox(double initial_weight) : Box(initial_weight), absorbedAtLeastOneWeight(false) {};
+
+    double absorb(double weight) override {
+        Box::absorb(weight);
+        if (absorbedAtLeastOneWeight) {
+            minWeight = std::min(minWeight, weight);
+            maxWeight = std::max(maxWeight, weight);
+        }
+        else {
+            minWeight = maxWeight = weight;
+        }
+        absorbedAtLeastOneWeight = true;
+        return calculateScore();
+    }
+
+private:
+    double minWeight, maxWeight;
+    bool absorbedAtLeastOneWeight;
+
+    double calculateScore() const override {
+        return cantorPairing(minWeight, maxWeight);
+    }
+};
+
+// Factory method to create a green box with the given initial weight
+std::unique_ptr<Box> Box::makeGreenBox(double initial_weight) {
+    return std::make_unique<GreenBox>(initial_weight);
+}
+
+// Factory method to create a blue box with the given initial weight
+std::unique_ptr<Box> Box::makeBlueBox(double initial_weight) {
+    return std::make_unique<BlueBox>(initial_weight);
+}
+
 class Player {
  public:
   void takeTurn(uint32_t input_weight,
