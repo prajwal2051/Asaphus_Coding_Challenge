@@ -235,24 +235,37 @@ std::pair<double, double> play(const std::vector<uint32_t>& input_weights) {
     return std::make_pair(player_A.getScore(), player_B.getScore());
 }
 
+// Test cases
+
 TEST_CASE("Final scores for first 4 Fibonacci numbers", "[fibonacci4]") {
-  std::vector<uint32_t> inputs{1, 1, 2, 3};
-  auto result = play(inputs);
-  REQUIRE(result.first == 13.0);
-  REQUIRE(result.second == 25.0);
+    std::vector<uint32_t> inputs{ 1, 1, 2, 3 };
+    auto result = play(inputs);
+    REQUIRE(result.first == 13.0);
+    REQUIRE(result.second == 25.0);
 }
 
 TEST_CASE("Final scores for first 8 Fibonacci numbers", "[fibonacci8]") {
-  std::vector<uint32_t> inputs{1, 1, 2, 3, 5, 8, 13, 21};
-  auto result = play(inputs);
-  REQUIRE(result.first == 155.0);
-  REQUIRE(result.second == 366.25);
+    std::vector<uint32_t> inputs{ 1, 1, 2, 3, 5, 8, 13, 21 };
+    auto result = play(inputs);
+    REQUIRE(result.first == 155.0);
+    REQUIRE(result.second == 366.25);
 }
 
 TEST_CASE("Test absorption of green box", "[green]") {
-  // TODO
+    std::unique_ptr<Box> greenBox = Box::makeGreenBox(1.0);
+    REQUIRE(greenBox->absorb(1.0) == 1.0);
+    REQUIRE(greenBox->absorb(2.0) == 1.5 * 1.5);
+    REQUIRE(greenBox->absorb(3.0) == 2.0 * 2.0);
+    REQUIRE(greenBox->absorb(4.0) == 3.0 * 3.0);
+    REQUIRE(greenBox->getWeight() == 11.0);
 }
 
 TEST_CASE("Test absorption of blue box", "[blue]") {
-  // TODO
+    std::unique_ptr<Box> blueBox = Box::makeBlueBox(1.0);
+    REQUIRE(blueBox->absorb(3.0) == 24.0);
+    REQUIRE(blueBox->absorb(2.0) == 18.0);
+    REQUIRE(blueBox->absorb(4.0) == 25.0);
+    REQUIRE(blueBox->absorb(1.0) == 19.0);
+    REQUIRE(blueBox->getWeight() == 11.0);
+
 }
