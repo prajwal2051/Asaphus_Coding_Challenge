@@ -47,14 +47,44 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-class Box {
- public:
-  explicit Box(double initial_weight) : weight_(initial_weight) {}
-  static std::unique_ptr<Box> makeGreenBox(double initial_weight);
-  static std::unique_ptr<Box> makeBlueBox(double initial_weight);
-  bool operator<(const Box& rhs) const { return weight_ < rhs.weight_; }
 
-  // TODO
+/**
+ * Base class representing a Box.
+ */
+class Box {
+public:
+    explicit Box(double initial_weight) : weight_(initial_weight) {}
+
+    virtual ~Box() = default;
+
+    static std::unique_ptr<Box> makeGreenBox(double initial_weight);
+
+    static std::unique_ptr<Box> makeBlueBox(double initial_weight);
+
+    bool operator<(const Box& rhs) const { return weight_ < rhs.weight_; }
+
+    /**
+     * Absorbs the given weight into the Box.
+     */
+    virtual double absorb(double weight) {
+        weight_ += weight;
+        return 0;
+    }
+
+    /**
+     * Retrieves the weight of the Box.
+     */
+
+    double getWeight() const {
+        return weight_;
+    }
+
+private:
+    /**
+     * Calculates the score of the Box.
+     *
+     */
+    virtual double calculateScore() const = 0;
 
  protected:
   double weight_;
